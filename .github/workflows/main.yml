@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "${{ github.token }}" | docker login https://ghcr.io -u ${GITHUB_ACTOR} --password-stdin
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ghcr.io/buildtheearth/uptime-kuma:$(git rev-parse --short HEAD) --tag ghcr.io/buildtheearth/uptime-kuma:latest
+        run: docker buildx build -f docker/dockerfile --platform linux/amd64,linux/arm64,linux/arm/v7 --tag ghcr.io/buildtheearth/uptime-kuma:$(git rev-parse --short HEAD) --tag ghcr.io/buildtheearth/uptime-kuma:latest --target release .
       - name: Docker push tag
         run: docker push ghcr.io/buildtheearth/uptime-kuma:$(git rev-parse --short HEAD)
       - name: Docker push latest
